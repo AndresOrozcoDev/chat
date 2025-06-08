@@ -3,7 +3,13 @@
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+
+  --bg-primary: #dedede;
+  --bg-secondary: #;
+  --bg-tertiary: #;
+  --dark-bg-primary: #212121;
+  --dark-bg-secondary: #303030;
+  --dark-bg-tertiary: #414141;
 }
 
 body {
