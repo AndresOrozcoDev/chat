@@ -4,9 +4,6 @@
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
 
-  --bg-primary: #dedede;
-  --bg-secondary: #;
-  --bg-tertiary: #;
   --dark-bg-primary: #212121;
   --dark-bg-secondary: #303030;
   --dark-bg-tertiary: #414141;
@@ -16,4 +13,22 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
+}
+
+.btn {
+  @apply h-14 rounded-xl px-10 cursor-pointer;
+}
+
+.btn--primary {
+  @apply bg-black text-white dark:bg-(--dark-bg-tertiary);
+}
+
+.required::after {
+  content: "*";
+  color: black;
+  padding-left: 2px;
+}
+
+.dark .required::after {
+  color: white;
 }

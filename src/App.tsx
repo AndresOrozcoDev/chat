@@ -23,7 +23,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
-      <div className='bg-gray-200 rounded-full absolute p-3 right-2 bottom-2 dark:bg-white' title={theme === 'light' ? 'Modo oscuro' : 'Modo claro'}>
+      <div className='bg-neutral-300 rounded-full absolute p-3 right-3 bottom-3 dark:bg-white' title={theme === 'light' ? 'Modo oscuro' : 'Modo claro'}>
         <Sun 
           color="black" 
           size={24} 
