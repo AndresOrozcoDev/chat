@@ -1,5 +1,5 @@
-import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { ChatMessage } from "../utils/types";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
 
 type ChatMessagesProps = {
   messages: ChatMessage[];
@@ -9,13 +9,8 @@ type ChatMessagesProps = {
   currentUserId: string;
 };
 
-const ChatMessages = ({
-  messages,
-  onShowChatList,
-  selectedUserUid,
-  onSendMessage, 
-  currentUserId
-}: ChatMessagesProps) => {
+
+const ChatMessages = ({ messages, onShowChatList, selectedUserUid, onSendMessage,  currentUserId }: ChatMessagesProps) => {
   const [message, setMessage] = useState("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

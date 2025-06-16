@@ -25,7 +25,7 @@ const Login = ({ }: LoginProps) => {
 };
 
   return (
-    <div className="h-screen w-screen">
+    <div className="h-dvh w-screen">
       {loading && <Loader />}
       <LoginForm onSubmit={handleLogin} />
     </div>

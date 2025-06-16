@@ -8,6 +8,7 @@ type ChatListProps = {
   onShowChatList: () => void;
 };
 
+
 const ChatList = ({ users, onUserClick, onLogout, onShowChatList }: ChatListProps) => {
   return (
     <div className="h-full bg-white flex flex-col text-black px-3 py-5 border-r border-r-neutral-300 dark:bg-(--dark-bg-primary) dark:text-white dark:border-none">

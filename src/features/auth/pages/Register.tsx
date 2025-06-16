@@ -24,7 +24,7 @@ const Register = ({ }: RegisterProps) => {
   };
 
   return (
-    <div className="h-screen w-screen text-black">
+    <div className="h-dvh w-screen text-black">
       {loading && <Loader />}
       <RegisterForm onSubmit={handleRegister} />
     </div>

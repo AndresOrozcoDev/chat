@@ -4,6 +4,7 @@ type RegisterFormProps = {
   onSubmit: (formData: { email: string; password: string }) => void;
 };
 
+
 const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

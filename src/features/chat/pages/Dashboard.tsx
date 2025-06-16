@@ -1,6 +1,7 @@
+import { Sun } from 'lucide-react';
 import { useEffect, useState } from "react";
-import ChatList from "../components/ChatList";
-import ChatMessages from "../components/ChatMessages";
+import { useNavigate } from "react-router-dom";
+
 import {
   addMessage,
   checkIfChatExists,
@@ -8,19 +9,24 @@ import {
   getAllUsers,
   getMessages
 } from "../services/chat.services";
-import { useAuth } from "../../../context/auth.context";
-import { useNavigate } from "react-router-dom";
+import ChatList from "../components/ChatList";
 import Loader from "../../../utils/components/Loader";
+import ChatMessages from "../components/ChatMessages";
 import { ChatMessage, ChatUser } from "../utils/types";
+import { useAuth } from "../../../context/auth.context";
+import { useTheme } from "../../../context/ThemeContext";
+
 
 function Dashboard() {
-  const { logout, user } = useAuth();
   const navigate = useNavigate();
-  const [showChatList, setShowChatList] = useState(false);
-  const [users, setUsers] = useState<ChatUser[]>([]);
+  const { logout, user } = useAuth();
+  const { theme, toggleTheme } = useTheme()
+
   const [loading, setLoading] = useState(false);
-  const [selectedUserUid, setSelectedUserUid] = useState<string | null>(null);
+  const [users, setUsers] = useState<ChatUser[]>([]);
+  const [showChatList, setShowChatList] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [selectedUserUid, setSelectedUserUid] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -39,16 +45,12 @@ function Dashboard() {
 
   const handleUserClick = async (uid: string) => {
     if (!user) return;
-
     setSelectedUserUid(uid);
-
     try {
       const chatExists = await checkIfChatExists(user.uid, uid);
-
       if (!chatExists) {
         await createNewChat(user.uid, uid);
       }
-
       const chatMessages = await getMessages(user.uid, uid);
       setMessages(chatMessages);
     } catch (error) {
@@ -58,7 +60,6 @@ function Dashboard() {
 
   const handleSendMessage = async (message: string) => {
     if (!user || !selectedUserUid) return;
-
     try {
       await addMessage(user.uid, selectedUserUid, message);
       const updatedMessages = await getMessages(user.uid, selectedUserUid);
@@ -81,7 +82,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="w-full h-dvh md:flex bg-white text-black">
+    <div className="w-full h-dvh relative md:flex bg-white text-black">
       {loading && <Loader />}
       <div className={`h-full ${showChatList ? "block" : "hidden"} md:w-1/5 md:block`}>
         <ChatList 
@@ -99,6 +100,17 @@ function Dashboard() {
           currentUserId={user?.uid as string}
         />
       </div>
+
+      <div className='bg-neutral-300 rounded-full absolute p-3 right-3 bottom-3 dark:bg-white' title={theme === 'light' ? 'Modo oscuro' : 'Modo claro'}>
+        <Sun 
+          color="black" 
+          size={24} 
+          onClick={toggleTheme} 
+          className='cursor-pointer' 
+          aria-label={theme === 'light' ? 'Modo oscuro' : 'Modo claro'}
+        />
+      </div>
+
     </div>
   );
 }
