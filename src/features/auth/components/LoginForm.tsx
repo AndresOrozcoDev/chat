@@ -18,9 +18,9 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
 
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-neutral-100 text-black dark:bg-(--dark-bg-primary)">
-      <form onSubmit={handleSubmit} className="bg-white w-5/6 md:w-3/5 shadow-xl rounded-md py-10 px-8 flex flex-col gap-6 dark:bg-(--dark-bg-secondary) dark:text-white">
+      <form onSubmit={handleSubmit} className="bg-white w-5/6 md:w-3/5 shadow-xl rounded-md py-5 px-4 md:py-10 md:px-8 flex flex-col gap-6 dark:bg-(--dark-bg-secondary) dark:text-white">
         <div className="flex gap-2 flex-col justify-center items-center">
-          <img src="/favicon.png" alt="Logo" className="size-24" />
+          <img src="/favicon.png" alt="Logo" className="size-20" />
           <h2 className="font-bold text-xl text-center">Bienvenido de regreso</h2>
           <p className="text-sm text-center">Ingresa tus credenciales.</p>
         </div>
@@ -32,7 +32,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full h-14 bg-white border text-black border-neutral-300 px-3 outline-none rounded-xl dark:bg-(--dark-bg-tertiary) dark:border-none dark:text-white" placeholder="user@example.com" />
+            className="w-full h-10 bg-white border text-black border-neutral-300 px-3 outline-none rounded-xl dark:bg-(--dark-bg-tertiary) dark:border-none dark:text-white" placeholder="user@example.com" />
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="password" className="required text-xs font-bold">Contraseña</label>
@@ -42,7 +42,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full h-14 bg-white border text-black border-neutral-300 px-3 outline-none rounded-xl dark:bg-(--dark-bg-tertiary) dark:border-none dark:text-white" placeholder="********" />
+            className="w-full h-10 bg-white border text-black border-neutral-300 px-3 outline-none rounded-xl dark:bg-(--dark-bg-tertiary) dark:border-none dark:text-white" placeholder="********" />
         </div>
         <div>
           <p className="text-center text-xs">No tienes una cuenta? <a className="underline text-blue-500" href="/register">Crear cuenta</a></p>
