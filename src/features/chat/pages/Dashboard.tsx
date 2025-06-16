@@ -1,19 +1,26 @@
 import { useEffect, useState } from "react";
 import ChatList from "../components/ChatList";
 import ChatMessages from "../components/ChatMessages";
-import { addMessage, checkIfChatExists, createNewChat, getAllUsers, getMessages } from "../services/chat.services";
+import {
+  addMessage,
+  checkIfChatExists,
+  createNewChat,
+  getAllUsers,
+  getMessages
+} from "../services/chat.services";
 import { useAuth } from "../../../context/auth.context";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../../utils/components/Loader";
+import { ChatMessage, ChatUser } from "../utils/types";
 
 function Dashboard() {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
   const [showChatList, setShowChatList] = useState(false);
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<ChatUser[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedUserUid, setSelectedUserUid] = useState<string | null>(null);
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -21,10 +28,10 @@ function Dashboard() {
       try {
         const usersList = await getAllUsers();
         setUsers(usersList);
-        setLoading(false);
       } catch (error) {
-        setLoading(false)
         console.error("Error al obtener usuarios:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchUsers();
@@ -32,69 +39,66 @@ function Dashboard() {
 
   const handleUserClick = async (uid: string) => {
     if (!user) return;
-    setSelectedUserUid(uid)
-    console.log(`El UID del usuario seleccionado es: ${uid}`);
-    const chatExists = await checkIfChatExists(user.uid, uid);
 
-    if (chatExists) {
-      console.log("El chat ya existe. Continuando...");
-      const messages = await getMessages(user.uid, uid);
-      setMessages(messages);
-    } else {
-      console.log("El chat no existe. Creando nuevo chat...");
-      await createNewChat(user.uid, uid);
-      const messages = await getMessages(user.uid, uid);
-      setMessages(messages);
-    }
-  };
+    setSelectedUserUid(uid);
 
-  const fetchMessages = async (uid: string) => {
-    if (user && uid) {
+    try {
+      const chatExists = await checkIfChatExists(user.uid, uid);
+
+      if (!chatExists) {
+        await createNewChat(user.uid, uid);
+      }
+
       const chatMessages = await getMessages(user.uid, uid);
       setMessages(chatMessages);
+    } catch (error) {
+      console.error("Error al manejar la selección de usuario:", error);
     }
   };
 
   const handleSendMessage = async (message: string) => {
-    if (user && selectedUserUid) {
-      console.log('mensaje:', message);
-      console.log('user id auth:', user.uid);
-      console.log('user id receptor:', selectedUserUid);
-      try {
-        await addMessage(user.uid, selectedUserUid, message);
-        fetchMessages(selectedUserUid);
-      } catch (error) {
-        console.error("Error al enviar el mensaje", error);
-      }
+    if (!user || !selectedUserUid) return;
+
+    try {
+      await addMessage(user.uid, selectedUserUid, message);
+      const updatedMessages = await getMessages(user.uid, selectedUserUid);
+      setMessages(updatedMessages);
+    } catch (error) {
+      console.error("Error al enviar el mensaje:", error);
     }
   };
 
   const handleLogOut = async () => {
     setLoading(true);
-    try{
+    try {
       await logout();
       navigate("/");
-      setLoading(false);
     } catch (error) {
+      console.error("Hubo un error al cerrar sesión:", error);
+    } finally {
       setLoading(false);
-      console.error('Hubo un error:', error);
-      
     }
-  }
+  };
 
   return (
-    <div className='w-full h-dvh md:flex bg-white text-black'>
-
+    <div className="w-full h-dvh md:flex bg-white text-black">
       {loading && <Loader />}
-
       <div className={`h-full ${showChatList ? "block" : "hidden"} md:w-1/5 md:block`}>
-        <ChatList users={users} onUserClick={handleUserClick} onLogout={handleLogOut} />
+        <ChatList 
+          onShowChatList={() => setShowChatList(false)} 
+          users={users} 
+          onUserClick={handleUserClick} 
+          onLogout={handleLogOut} />
       </div>
-
-      <div className={`h-full w-full ${!showChatList ? "block" : "hidden"} md:block md:w-4/5`} >
-        <ChatMessages onShowChatList={() => setShowChatList(true)} onSendMessage={handleSendMessage} messages={messages} selectedUserUid={selectedUserUid}/>
+      <div className={`h-full w-full ${!showChatList ? "block" : "hidden"} md:block md:w-4/5`}>
+        <ChatMessages
+          onShowChatList={() => setShowChatList(true)}
+          onSendMessage={handleSendMessage}
+          messages={messages}
+          selectedUserUid={selectedUserUid}
+          currentUserId={user?.uid as string}
+        />
       </div>
-
     </div>
   );
 }

@@ -19,7 +19,9 @@ const Login = ({ }: LoginProps) => {
   } catch (error: any) {
     setLoading(false);
     console.error("Error al iniciar sesión:", error.message);
-  }
+  } finally {
+      setLoading(false);
+    }
 };
 
   return (

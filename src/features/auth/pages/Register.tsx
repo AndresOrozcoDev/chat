@@ -17,8 +17,9 @@ const Register = ({ }: RegisterProps) => {
       await register(formData.email, formData.password);
       navigate("/dashboard");
     } catch (error: any) {
-      setLoading(false);
       console.error("Error al registrarse:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 

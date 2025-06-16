@@ -1,15 +1,18 @@
 import { addDoc, collection, doc, getDoc, getDocs, orderBy, query, serverTimestamp, setDoc, where } from "firebase/firestore";
 import { db } from "../../../firebase-config";
 import { AuthUser } from "../../auth/utils/types";
+import { ChatMessage, ChatUser } from "../utils/types";
 
-export const getAllUsers = async () => {
+const usersRef = collection(db, "users");
+const userChatsRef = (uid: string) => collection(db, "users", uid, "chats");
+
+export const getAllUsers = async (): Promise<ChatUser[]> => {
   try {
-    const usersSnapshot = await getDocs(collection(db, "users"));
-    const usersList = usersSnapshot.docs.map((doc) => ({
+    const usersSnapshot = await getDocs(usersRef);
+    return usersSnapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data()
-    }));
-    return usersList;
+      ...doc.data(),
+    })) as ChatUser[];
   } catch (error) {
     console.error("Error al obtener usuarios:", error);
     throw error;
@@ -18,96 +21,82 @@ export const getAllUsers = async () => {
 
 export const createUser = async (user: AuthUser): Promise<void> => {
   try {
-    const userRef = doc(db, 'users', user.uid);
+    const userRef = doc(usersRef, user.uid);
     await setDoc(userRef, {
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
       createdAt: serverTimestamp(),
-      chats: [],
     });
-    console.log("Usuario creado en Firestore con timestamp");
-
   } catch (error) {
     console.error("Error al crear el usuario en Firestore:", error);
     throw error;
   }
 };
 
-export const addMessage = async (uidSender: string, uidReceiver: string, messageText: string) => {
+export const addMessage = async (uidSender: string, uidReceiver: string, messageText: string): Promise<void> => {
   try {
-    // Creamos el mensaje para el chat del emisor
-    const messageRefSender = collection(db, "users", uidSender, "chats", uidReceiver, "messages");
-    const newMessageSender = await addDoc(messageRefSender, {
+    const senderRef = collection(db, "users", uidSender, "chats", uidReceiver, "messages");
+    const receiverRef = collection(db, "users", uidReceiver, "chats", uidSender, "messages");
+
+    const message = {
       text: messageText,
       createdAt: serverTimestamp(),
-    });
+      senderId: uidSender,
+    };
 
-    // Creamos el mensaje para el chat del receptor
-    const messageRefReceiver = collection(db, "users", uidReceiver, "chats", uidSender, "messages");
-    await addDoc(messageRefReceiver, {
-      text: messageText,
-      createdAt: serverTimestamp(),
-    });
-
-    console.log("Mensaje enviado correctamente en ambos chats");
+    await Promise.all([
+      addDoc(senderRef, message),
+      addDoc(receiverRef, message),
+    ]);
   } catch (error) {
     console.error("Error al enviar el mensaje:", error);
     throw error;
   }
 };
 
-export const getMessages = async (uidAuth: string, uidReceiver: string) => {
+export const getMessages = async (uidAuth: string, uidReceiver: string): Promise<ChatMessage[]> => {
   try {
-    // Acceder a la colección de mensajes del chat entre el usuario autenticado y el receptor
     const messagesRef = collection(db, "users", uidAuth, "chats", uidReceiver, "messages");
     const q = query(messagesRef, orderBy("createdAt", "asc"));
     const querySnapshot = await getDocs(q);
 
-    const messages = querySnapshot.docs.map((doc) => ({
+    return querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
-    }));
-    return messages;
+    })) as ChatMessage[];
   } catch (error) {
     console.error("Error al obtener los mensajes:", error);
     throw error;
   }
 };
 
-// Verifica si existe un chat entre el usuario autenticado y el receptor
-export const checkIfChatExists = async (uidAuth: string, uidReceiver: string) => {
+export const checkIfChatExists = async (uidAuth: string, uidReceiver: string): Promise<boolean> => {
   try {
-    const chatRef = collection(db, "users", uidAuth, "chats");
+    const chatRef = userChatsRef(uidAuth);
     const q = query(chatRef, where("userId", "==", uidReceiver));
     const querySnapshot = await getDocs(q);
-    return !querySnapshot.empty; // Si no está vacío, significa que ya existe un chat
+    return !querySnapshot.empty;
   } catch (error) {
     console.error("Error al verificar el chat:", error);
     throw error;
   }
 };
 
-// Crear un nuevo chat entre el usuario autenticado y el receptor
-export const createNewChat = async (uidAuth: string, uidReceiver: string) => {
+export const createNewChat = async (uidAuth: string, uidReceiver: string): Promise<void> => {
   try {
-    const chatRef = collection(db, "users", uidAuth, "chats");
-    const newChatRef = doc(chatRef, uidReceiver);
-    await setDoc(newChatRef, {
-      userId: uidReceiver,
-      createdAt: new Date(),
-      messages: [],
-    });
+    const now = serverTimestamp();
 
-    // También se debe crear un chat para el receptor con el usuario autenticado
-    const chatReceiverRef = collection(db, "users", uidReceiver, "chats");
-    await setDoc(doc(chatReceiverRef, uidAuth), {
-      userId: uidAuth,
-      createdAt: new Date(),
-      messages: [],
-    });
-
-    console.log("Nuevo chat creado entre los usuarios");
+    await Promise.all([
+      setDoc(doc(userChatsRef(uidAuth), uidReceiver), {
+        userId: uidReceiver,
+        createdAt: now,
+      }),
+      setDoc(doc(userChatsRef(uidReceiver), uidAuth), {
+        userId: uidAuth,
+        createdAt: now,
+      })
+    ]);
   } catch (error) {
     console.error("Error al crear el chat:", error);
     throw error;

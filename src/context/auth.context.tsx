@@ -46,6 +46,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.setItem("user", JSON.stringify(userData));
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
+      throw error;
     }
   };
 
@@ -57,6 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(userData);
     } catch (error) {
       console.error("Error al registrarse:", error);
+      throw error;
     }
   };
 
