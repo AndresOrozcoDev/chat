@@ -9,18 +9,15 @@ type LoginProps = {};
 const Login = ({ }: LoginProps) => {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (formData: { email: string; password: string }) => {
   try {
     setLoading(true);
     await login(formData.email, formData.password);
-    setError(null);
     navigate("/dashboard");
   } catch (error: any) {
     setLoading(false);
-    setError(error.message);
     console.error("Error al iniciar sesión:", error.message);
   }
 };

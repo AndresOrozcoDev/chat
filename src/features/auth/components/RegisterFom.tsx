@@ -28,6 +28,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
           <input
             type="email"
             id="email"
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full h-14 bg-white border text-black border-neutral-300 px-3 outline-none rounded-xl dark:bg-(--dark-bg-tertiary) dark:border-none dark:text-white" placeholder="user@example.com" />
@@ -37,6 +38,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
           <input
             type="password"
             id="password"
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full h-14 bg-white border text-black border-neutral-300 px-3 outline-none rounded-xl dark:bg-(--dark-bg-tertiary) dark:border-none dark:text-white" placeholder="********" />

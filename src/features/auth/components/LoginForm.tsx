@@ -28,6 +28,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
           <input
             type="email"
             id="email"
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full h-14 bg-white border text-black border-neutral-300 px-3 outline-none rounded-xl dark:bg-(--dark-bg-tertiary) dark:border-none dark:text-white" placeholder="user@example.com" />
@@ -37,6 +38,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
           <input
             type="password"
             id="password"
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full h-14 bg-white border text-black border-neutral-300 px-3 outline-none rounded-xl dark:bg-(--dark-bg-tertiary) dark:border-none dark:text-white" placeholder="********" />
@@ -46,7 +48,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
           {/* TODO div for btns login provider */}
         </div>
         <div className="flex justify-center w-full">
-          <input type="submit" value="Iniciar sesion" className="btn btn--primary" />
+          <input type="submit" value="Iniciar sesion" className="btn btn--primary" title="Iniciar sesion" aria-label="Iniciar sesion"/>
         </div>
       </form>
     </div>
