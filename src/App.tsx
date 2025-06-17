@@ -10,7 +10,7 @@ import './App.css'
 
 function App() {
   return (
-    <div className='w-screen h-dvh relative bg-white text-black dark:bg-neutral-200'>
+    <div className='w-dvw h-dvh relative bg-white text-black dark:bg-neutral-200'>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
