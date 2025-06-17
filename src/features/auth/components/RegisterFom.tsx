@@ -17,7 +17,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
   };
 
   return (
-    <div className="h-dvh w-screen flex items-center justify-center bg-neutral-100 text-black dark:bg-(--dark-bg-primary)">
+    <div className="h-full w-full flex items-center justify-center overflow-y-auto bg-neutral-100 text-black dark:bg-(--dark-bg-primary)">
       <form onSubmit={handleSubmit} className="bg-white w-5/6 md:w-3/6 shadow-xl rounded-md py-5 px-4 md:py-10 md:px-8 flex flex-col gap-4 dark:bg-(--dark-bg-secondary) dark:text-white">
         <div className="flex gap-2 flex-col justify-center items-center">
           <img src="/favicon.png" alt="Logo" className="size-20" />
