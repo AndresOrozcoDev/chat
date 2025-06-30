@@ -29,6 +29,12 @@ function Dashboard() {
   const [selectedUserUid, setSelectedUserUid] = useState<string | null>(null);
 
   useEffect(() => {
+  if (!user) {
+    navigate("/");
+  }
+}, [user, navigate]);
+
+  useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
       try {
@@ -85,10 +91,10 @@ function Dashboard() {
     <div className="w-full h-dvh relative md:flex bg-white text-black">
       {loading && <Loader />}
       <div className={`h-full ${showChatList ? "block" : "hidden"} md:w-1/5 md:block`}>
-        <ChatList 
-          onShowChatList={() => setShowChatList(false)} 
-          users={users} 
-          onUserClick={handleUserClick} 
+        <ChatList
+          onShowChatList={() => setShowChatList(false)}
+          users={users}
+          onUserClick={handleUserClick}
           onLogout={handleLogOut} />
       </div>
       <div className={`h-full w-full ${!showChatList ? "block" : "hidden"} md:block md:w-4/5`}>
@@ -102,11 +108,11 @@ function Dashboard() {
       </div>
 
       <div className='bg-neutral-300 rounded-full absolute p-3 right-3 bottom-3 dark:bg-white' title={theme === 'light' ? 'Modo oscuro' : 'Modo claro'}>
-        <Sun 
-          color="black" 
-          size={24} 
-          onClick={toggleTheme} 
-          className='cursor-pointer' 
+        <Sun
+          color="black"
+          size={24}
+          onClick={toggleTheme}
+          className='cursor-pointer'
           aria-label={theme === 'light' ? 'Modo oscuro' : 'Modo claro'}
         />
       </div>

@@ -1,5 +1,6 @@
 import { ChatMessage } from "../utils/types";
 import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { AlignLeft} from 'lucide-react'
 
 type ChatMessagesProps = {
   messages: ChatMessage[];
@@ -37,7 +38,7 @@ const ChatMessages = ({ messages, onShowChatList, selectedUserUid, onSendMessage
           className="md:hidden text-blue-600 font-semibold w-20 text-left cursor-pointer"
           onClick={onShowChatList}
         >
-          Chats
+          <AlignLeft className="w-6 h-6 text-black dark:text-white" />
         </button>
         <p className="font-bold text-lg truncate">
           {selectedUserUid || "Selecciona un usuario"}

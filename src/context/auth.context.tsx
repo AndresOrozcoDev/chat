@@ -1,83 +1,80 @@
-import React, { createContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useState, useEffect, useContext, ReactNode } from "react";
 import { loginUser, registerUser } from "../features/auth/services/auth.services";
 import { AuthUser } from "../features/auth/utils/types";
-import { UserCredential } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut, User, UserCredential } from "firebase/auth";
 
-// Función para mapear el usuario de Firebase a AuthUser
-const mapFirebaseUserToAuthUser = (userCredential: UserCredential): AuthUser => {
-  const user = userCredential.user;
-  return {
-    uid: user.uid,
-    email: user.email,
-    displayName: user.displayName,
-    photoURL: user.photoURL,
-  };
-};
+// 🔁 Convierte un User de Firebase a AuthUser
+const mapFirebaseUserToAuthUser = (user: User): AuthUser => ({
+  uid: user.uid,
+  email: user.email,
+  displayName: user.displayName,
+  photoURL: user.photoURL,
+});
 
-// Definir los tipos para el contexto
+// 🔐 Tipos del contexto
 interface AuthContextType {
   user: AuthUser | null;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
-// Crear el contexto
+// 🔁 Contexto de autenticación
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Componente de proveedor del contexto
+// 🧠 Proveedor del contexto
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true); // Opcional, útil si usas loader
 
-  // Almacenar el usuario en el estado y en localStorage
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    const auth = getAuth();
+
+    // 🔄 Mantiene el estado sincronizado con Firebase Auth
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        const userData = mapFirebaseUserToAuthUser(firebaseUser);
+        setUser(userData);
+      } else {
+        setUser(null);
+      }
+      setIsAuthLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  // Función de login
+  // 🔑 Iniciar sesión
   const login = async (email: string, password: string) => {
-    try {
-      const userCredential = await loginUser(email, password);
-      const userData = mapFirebaseUserToAuthUser(userCredential);
-      setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
-    } catch (error) {
-      console.error("Error al iniciar sesión:", error);
-      throw error;
-    }
+    const userCredential: UserCredential = await loginUser(email, password);
+    const userData = mapFirebaseUserToAuthUser(userCredential.user);
+    setUser(userData); // Redundante pero útil si quieres efecto inmediato
   };
 
-  // Función de registro
+  // 📝 Registrar nuevo usuario
   const register = async (email: string, password: string) => {
-    try {
-      const userCredential = await registerUser(email, password);
-      const userData = mapFirebaseUserToAuthUser(userCredential);
-      setUser(userData);
-    } catch (error) {
-      console.error("Error al registrarse:", error);
-      throw error;
-    }
+    const userCredential: UserCredential = await registerUser(email, password);
+    const userData = mapFirebaseUserToAuthUser(userCredential.user);
+    setUser(userData);
   };
 
-  // Función de logout
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
+  // 🚪 Cerrar sesión
+  const logout = async () => {
+    const auth = getAuth();
+    await signOut(auth);
+    setUser(null); // Limpieza inmediata
   };
 
   return (
     <AuthContext.Provider value={{ user, login, register, logout }}>
-      {children}
+      {!isAuthLoading && children}
     </AuthContext.Provider>
   );
 };
 
-// Hook para usar el contexto de forma sencilla
+// 🎣 Hook personalizado para consumir el contexto
 export const useAuth = (): AuthContextType => {
-  const context = React.useContext(AuthContext);
+  const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth debe usarse dentro de un AuthProvider");
   }

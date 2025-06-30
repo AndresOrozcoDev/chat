@@ -36,19 +36,25 @@ export const createUser = async (user: AuthUser): Promise<void> => {
 
 export const addMessage = async (uidSender: string, uidReceiver: string, messageText: string): Promise<void> => {
   try {
-    const senderRef = collection(db, "users", uidSender, "chats", uidReceiver, "messages");
-    const receiverRef = collection(db, "users", uidReceiver, "chats", uidSender, "messages");
-
     const message = {
       text: messageText,
       createdAt: serverTimestamp(),
       senderId: uidSender,
     };
 
-    await Promise.all([
-      addDoc(senderRef, message),
-      addDoc(receiverRef, message),
-    ]);
+    // 🧠 Si el chat es consigo mismo, escribe solo una vez
+    if (uidSender === uidReceiver) {
+      const selfRef = collection(db, "users", uidSender, "chats", uidReceiver, "messages");
+      await addDoc(selfRef, message);
+    } else {
+      const senderRef = collection(db, "users", uidSender, "chats", uidReceiver, "messages");
+      const receiverRef = collection(db, "users", uidReceiver, "chats", uidSender, "messages");
+
+      await Promise.all([
+        addDoc(senderRef, message),
+        addDoc(receiverRef, message),
+      ]);
+    }
   } catch (error) {
     console.error("Error al enviar el mensaje:", error);
     throw error;
