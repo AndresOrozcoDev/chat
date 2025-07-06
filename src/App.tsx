@@ -6,6 +6,7 @@ import Register from './features/auth/pages/Register'
 import Dashboard from './features/chat/pages/Dashboard'
 
 import './App.css'
+import Account from './features/profile/pages/Account'
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/account" element={<Account />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

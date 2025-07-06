@@ -14,6 +14,7 @@ const mapFirebaseUserToAuthUser = (user: User): AuthUser => ({
 // 🔐 Tipos del contexto
 interface AuthContextType {
   user: AuthUser | null;
+  firebaseUser: User | null;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -25,6 +26,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // 🧠 Proveedor del contexto
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
+  const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true); // Opcional, útil si usas loader
 
   useEffect(() => {
@@ -35,6 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (firebaseUser) {
         const userData = mapFirebaseUserToAuthUser(firebaseUser);
         setUser(userData);
+        setFirebaseUser(firebaseUser);
       } else {
         setUser(null);
       }
@@ -66,7 +69,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, firebaseUser,  login, register, logout }}>
       {!isAuthLoading && children}
     </AuthContext.Provider>
   );
