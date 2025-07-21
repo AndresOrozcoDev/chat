@@ -21,7 +21,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
       <form onSubmit={handleSubmit} className="bg-white w-5/6 md:w-3/6 shadow-xl rounded-md py-5 px-4 md:py-10 md:px-8 flex flex-col gap-4 dark:bg-(--dark-bg-secondary) dark:text-white">
         <div className="flex gap-2 flex-col justify-center items-center">
           <img src="/favicon.png" alt="Logo" className="size-20" />
-          <h2 className="font-bold text-xl text-center">Bienvenido</h2>
+          <h2 className="font-bold text-xl text-center">Registrate</h2>
           <p className="text-sm text-center">Ingresa tus nuevas credenciales.</p>
         </div>
         <div className="flex flex-col gap-2">

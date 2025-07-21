@@ -4,13 +4,14 @@ import { useAuth } from "../../../context/auth.context";
 
 type ChatListProps = {
   users: ChatUser[];
+  chatbotId: string | null;
   onUserClick: (uid: string) => void;
   onLogout: () => void;
   onShowChatList: () => void;
 };
 
 
-const ChatList = ({ users, onUserClick, onLogout, onShowChatList }: ChatListProps) => {
+const ChatList = ({ users, chatbotId, onUserClick, onLogout, onShowChatList }: ChatListProps) => {
   const { user } = useAuth();
 
   return (
@@ -47,7 +48,16 @@ const ChatList = ({ users, onUserClick, onLogout, onShowChatList }: ChatListProp
           ))}
         </ul>
       </div>
-      <div className="h-16 flex items-center">
+      <div className="flex flex-col gap-2 items-center">
+        {chatbotId && (
+          <button
+            onClick={() => { onUserClick(chatbotId) }}
+            className="w-full py-2 px-1 border-none focus-visible:outline-none text-center text-black rounded-xl hover:cursor-pointer hover:bg-neutral-100 dark:text-white dark:hover:text-gray-300 dark:hover:bg-(--dark-bg-tertiary)"
+            aria-label="Asistente virtual"
+          >
+            Asistente virtual
+          </button>
+        )}
         <button
           onClick={onLogout}
           className="w-full py-2 px-1 border-none focus-visible:outline-none text-center text-black rounded-xl hover:cursor-pointer hover:bg-neutral-100 dark:text-white dark:hover:text-gray-300 dark:hover:bg-(--dark-bg-tertiary)"
