@@ -36,6 +36,8 @@ Automatically deployed with [Vercel](https://vercel.com), using serverless funct
 - [Node](https://nodejs.org/)
 - [Git](https://git-scm.com/)
 
+---
+
 ## 💻 Local Setup
 
 Clone the repository
