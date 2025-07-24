@@ -68,6 +68,8 @@ Generate the production build
     npm run build
 ```
 
+---
+
 ## 👨‍💻 Author
 
 Developed with 💙 by [Andrés Orozco](https://github.com/AndresOrozcoDev)
