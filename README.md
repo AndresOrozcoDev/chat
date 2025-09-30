@@ -17,58 +17,62 @@
   <img src="https://img.shields.io/badge/license-MIT-blue" />
 </p>
 
-Aplicacion web que simula un chat basado en React para la gestion de usuarios con sus respectivos mensajes en diferentes chats en tiempo real.
+A web application that simulates a chat built with React for managing users and their messages across different real-time chats.
 
 ---
 
-## 🔗 Demo en Vivo
+## 🔗 Live Demo
 
-Puedes ver el chat funcionando en producción aquí:
+You can see the chat running in production here:
 
 👉 [Chat](chat-ochre-alpha-83.vercel.app)
 
-Desplegado automáticamente con [Vercel](https://vercel.com), utilizando funciones serverless para los endpoints API.
+Automatically deployed with [Vercel](https://vercel.com), using serverless functions for API endpoints.
 
 ---
 
-## 🛠️ Requerimientos
+## 🛠️ Requirements
 
 - [Node](https://nodejs.org/)
 - [Git](https://git-scm.com/)
 
-## 💻 Ejecucion local
+---
 
-Clonar el repositorio
+## 💻 Local Setup
+
+Clone the repository
 ```bash
     git clone https://github.com/AndresOrozcoDev/chat.git
     cd chat
 ```
 
-Instalar las dependencias
+Install dependencies
 ```bash
     npm install
 ```
 
-Ejecutar el servidor
+Run the development server
 ```bash
     npm run dev
 ```
 
-## Pruebas
-Ejecuta las pruebas unitarias
+## Tests
+Run unit tests
 ```bash
     
 ```
 
-## Despliegues
-Genera el artefacto
+## Deployments
+Generate the production build
 ```bash
     npm run build
 ```
 
-## 👨‍💻 Autor
+---
 
-Desarrollado con 💙 por [Andrés Orozco](https://github.com/AndresOrozcoDev)
+## 👨‍💻 Author
+
+Developed with 💙 by [Andrés Orozco](https://github.com/AndresOrozcoDev)
 
 - 📬 [andresorozcodev@gmail.com](mailto:andresorozcodev@gmail.com)
 - 🌐 [LinkedIn](https://www.linkedin.com/in/andresorozcodev)
