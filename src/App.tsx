@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-import NotFound from './utils/pages/NotFound'
+import NotFound from './shared/pages/NotFound'
 import Login from './features/auth/pages/Login'
 import Register from './features/auth/pages/Register'
 import Dashboard from './features/chat/pages/Dashboard'

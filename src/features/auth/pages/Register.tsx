@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../../../context/auth.context";
 import RegisterForm from "../components/RegisterFom";
 import { useNavigate } from "react-router-dom";
-import Loader from "../../../utils/components/Loader";
+import Loader from "../../../shared/components/Loader";
 
 type RegisterProps = {};
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../../context/auth.context";
 import LoginForm from "../components/LoginForm";
 import { useNavigate } from "react-router-dom";
-import Loader from "../../../utils/components/Loader";
+import Loader from "../../../shared/components/Loader";
 
 type LoginProps = {};
 

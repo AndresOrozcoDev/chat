@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/auth.context";
 import { useTheme } from "../../../context/ThemeContext";
 import ProfileForm from '../components/ProfileForm';
-import Loader from '../../../utils/components/Loader';
+import Loader from '../../../shared/components/Loader';
 import { changePassword } from '../services/profile.services';
 
 function Account() {

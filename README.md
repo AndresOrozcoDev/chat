@@ -56,10 +56,72 @@ Run the development server
     npm run dev
 ```
 
-## Tests
-Run unit tests
+## 📁 Structure
+
 ```bash
-    
+├── index.html
+├── package.json
+├── .env
+├── vercel.json
+├── vitest.config.ts
+├── public/
+├── src/
+│   ├── test/
+│   │   ├── setup.ts
+│   ├── assets/
+│   │   ├── fonts/
+│   │   ├── images/
+│   │   └── icons/
+│   ├── context/
+│   │   ├── auth.context.ts
+│   │   └── theme.context.ts
+│   ├── shared/
+│   │   ├── components/
+│   │   └── pages/
+│   ├── features/
+│   │   ├── auth/
+│   │   │   ├── components/
+│   │   │   ├── pages/
+│   │   │   ├── services/
+│   │   │   ├── utils/
+│   │   │   │  └── types.ts
+│   │   ├── profile/
+│   │   │   ├── components/
+│   │   │   ├── pages/
+│   │   │   └── services/
+│   │   └── chat/
+│   │       ├── components/
+│   │       ├── pages/
+│   │       ├── services/
+│   │       ├── utils/
+│   │       │  └── types.ts
+│   ├── App.css
+│   ├── App.tsx
+│   ├── index.css
+│   ├── firebase-config.ts.css
+│   └── main.tsx
+```
+
+## Tests
+Runs tests in watch mode with fast feedback (development mode).
+```bash
+    npm run test
+```
+
+Run tests with coverage
+```bash
+    npm run test:coverage
+```
+
+Run tests with UI
+```bash
+    npm run test:ui
+```
+
+## Maintenance Checklist
+Review package vulnerabilities in production
+```bash
+    npm audit fix
 ```
 
 ## Deployments

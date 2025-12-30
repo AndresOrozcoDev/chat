@@ -10,7 +10,7 @@ import {
   getMessages,
 } from "../services/chat.services";
 import ChatList from "../components/ChatList";
-import Loader from "../../../utils/components/Loader";
+import Loader from "../../../shared/components/Loader";
 import ChatMessages from "../components/ChatMessages";
 import { ChatMessage, ChatUser } from "../utils/types";
 import { useAuth } from "../../../context/auth.context";
