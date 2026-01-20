@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDocs, orderBy, query, serverTimestamp, setDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, orderBy, query, serverTimestamp, setDoc, where } from "firebase/firestore";
 import { db } from "../../../firebase-config";
 import { AuthUser } from "../../auth/utils/types";
 import { ChatMessage, ChatUser } from "../utils/types";
@@ -109,25 +109,19 @@ export const createNewChat = async (uidAuth: string, uidReceiver: string): Promi
   }
 };
 
-export const getChatbotId = async (uid: string): Promise<string> => {
+export const getUserById = async (uid: string): Promise<ChatUser | null> => {
   try {
-    const chatbotRef = collection(db, "users", uid, "chatbot");
-    const snapshot = await getDocs(chatbotRef);
+    const userRef = doc(db, "users", uid);
+    const snapshot = await getDoc(userRef);
 
-    if (!snapshot.empty) {
-      return snapshot.docs[0].id;
-    } else {
-      throw new Error("No se encontró un chatbot para este usuario.");
-    }
+    if (!snapshot.exists()) return null;
+
+    return {
+      id: snapshot.id,
+      ...snapshot.data(),
+    } as ChatUser;
   } catch (error) {
-    console.error("Error al obtener el chatbotId:", error);
+    console.error("Error al obtener usuario:", error);
     throw error;
   }
-};
-
-export const getChatbotMessages = async (uid: string, chatbotId: string): Promise<ChatMessage[]> => {
-  const messagesRef = collection(db, "users", uid, "chatbot", chatbotId, "messages");
-  const q = query(messagesRef, orderBy("createdAt", "asc"));
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as ChatMessage[];
 };

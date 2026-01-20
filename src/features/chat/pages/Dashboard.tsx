@@ -8,6 +8,7 @@ import {
   createNewChat,
   getAllUsers,
   getMessages,
+  getUserById,
 } from "../services/chat.services";
 import ChatList from "../components/ChatList";
 import Loader from "../../../shared/components/Loader";
@@ -27,6 +28,7 @@ function Dashboard() {
   const [showChatList, setShowChatList] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [selectedUserUid, setSelectedUserUid] = useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = useState<ChatUser | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -57,11 +59,17 @@ function Dashboard() {
       if (!chatExists) {
         await createNewChat(user.uid, uid);
       }
-      const chatMessages = await getMessages(user.uid, uid);
-      setMessages(chatMessages);
-    } catch (error) {
-      console.error("Error al manejar la selección de usuario:", error);
-    }
+      const [chatMessages, chatUser] = await Promise.all([
+      getMessages(user.uid, uid),
+      getUserById(uid),
+    ]);
+
+    setMessages(chatMessages);
+    setSelectedUser(chatUser);
+
+  } catch (error) {
+    console.error("Error al manejar la selección de usuario:", error);
+  }
   };
 
   const handleSendMessage = async (message: string) => {
@@ -108,6 +116,7 @@ function Dashboard() {
           onSendMessage={handleSendMessage}
           messages={messages}
           selectedUserUid={selectedUserUid}
+          selectedUser={selectedUser}
           currentUserId={user?.uid as string}
         />
       </div>

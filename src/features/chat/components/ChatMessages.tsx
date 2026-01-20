@@ -1,17 +1,19 @@
-import { ChatMessage } from "../utils/types";
+import { ChatMessage, ChatUser } from "../utils/types";
 import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { AlignLeft} from 'lucide-react'
+import { AuthUser } from "../../auth/utils/types";
 
 type ChatMessagesProps = {
   messages: ChatMessage[];
   onShowChatList: () => void;
   selectedUserUid: string | null;
   onSendMessage: (message: string) => void;
+  selectedUser: ChatUser | null;
   currentUserId: string;
 };
 
 
-const ChatMessages = ({ messages, onShowChatList, selectedUserUid, onSendMessage,  currentUserId }: ChatMessagesProps) => {
+const ChatMessages = ({ messages, onShowChatList, selectedUserUid, onSendMessage,  selectedUser, currentUserId }: ChatMessagesProps) => {
   const [message, setMessage] = useState("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +43,7 @@ const ChatMessages = ({ messages, onShowChatList, selectedUserUid, onSendMessage
           <AlignLeft className="w-6 h-6 text-black dark:text-white" />
         </button>
         <p className="font-bold text-lg truncate">
-          {selectedUserUid || "Selecciona un usuario"}
+          {selectedUser?.email ?? "Selecciona un usuario"}
         </p>
         <div className="md:hidden w-20" />
       </div>
