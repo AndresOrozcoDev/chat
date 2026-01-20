@@ -1,7 +1,6 @@
 import { ChatMessage, ChatUser } from "../utils/types";
 import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { AlignLeft} from 'lucide-react'
-import { AuthUser } from "../../auth/utils/types";
 
 type ChatMessagesProps = {
   messages: ChatMessage[];
