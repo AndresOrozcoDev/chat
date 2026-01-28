@@ -11,7 +11,19 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit({ email, password });
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedPassword = password.trim();
+
+    if (!normalizedEmail || !normalizedPassword) {
+      return;
+    }
+
+    onSubmit({
+      email: normalizedEmail,
+      password: normalizedPassword,
+    });
+
     setEmail("");
     setPassword("");
   };
@@ -30,6 +42,10 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
             type="email"
             id="email"
             required
+            autoComplete="email"
+            inputMode="email"
+            minLength={5}
+            maxLength={100}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full h-10 bg-white border text-black border-neutral-300 px-3 outline-none rounded-xl dark:bg-(--dark-bg-tertiary) dark:border-none dark:text-white" placeholder="user@example.com" />
@@ -40,6 +56,9 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
             type="password"
             id="password"
             required
+            autoComplete="current-password"
+            minLength={5}
+            maxLength={100}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full h-10 bg-white border text-black border-neutral-300 px-3 outline-none rounded-xl dark:bg-(--dark-bg-tertiary) dark:border-none dark:text-white" placeholder="********" />
