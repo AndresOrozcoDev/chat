@@ -39,6 +39,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
+
       try {
         const usersList = await getAllUsers();
         setUsers(usersList);
@@ -51,6 +52,31 @@ function Dashboard() {
     fetchUsers();
   }, []);
 
+  useEffect(() => {
+    const printUserData = async () => {
+      if (!user) return;
+
+      console.log("=== Datos del user del contexto ===");
+      console.log(user);
+
+      // Si tienes firebaseUser desde Auth (por ejemplo)
+      const firebaseUser = user; // o como lo tengas
+      console.log("=== Datos de Firebase Auth ===");
+      console.log(firebaseUser);
+
+      // Intentar obtener los datos completos de Firestore
+      try {
+        const userFromDb = await getUserById(user.uid);
+        console.log("=== Datos completos de Firestore ===");
+        console.log(userFromDb);
+      } catch (error) {
+        console.error("Error obteniendo datos de Firestore:", error);
+      }
+    };
+
+    printUserData();
+  }, [user]);
+
   const handleUserClick = async (uid: string) => {
     if (!user) return;
     setSelectedUserUid(uid);
@@ -60,16 +86,16 @@ function Dashboard() {
         await createNewChat(user.uid, uid);
       }
       const [chatMessages, chatUser] = await Promise.all([
-      getMessages(user.uid, uid),
-      getUserById(uid),
-    ]);
+        getMessages(user.uid, uid),
+        getUserById(uid),
+      ]);
 
-    setMessages(chatMessages);
-    setSelectedUser(chatUser);
+      setMessages(chatMessages);
+      setSelectedUser(chatUser);
 
-  } catch (error) {
-    console.error("Error al manejar la selección de usuario:", error);
-  }
+    } catch (error) {
+      console.error("Error al manejar la selección de usuario:", error);
+    }
   };
 
   const handleSendMessage = async (message: string) => {
