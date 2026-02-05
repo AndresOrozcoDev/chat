@@ -5,7 +5,7 @@ import { db, storage } from "../../../firebase-config";
 
 interface UpdateUserData {
   uid: string;
-  fullname?: string;
+  displayName?: string;
   avatarFile?: File;
 }
 
@@ -17,7 +17,7 @@ export const changePassword = async (user: User, newPassword: string): Promise<v
   }
 };
 
-export const updateUserData = async ({ uid, fullname, avatarFile }: UpdateUserData) => {
+export const updateUserData = async ({ uid, displayName, avatarFile }: UpdateUserData) => {
   try {
     let avatarURL: string | undefined;
 
@@ -29,7 +29,7 @@ export const updateUserData = async ({ uid, fullname, avatarFile }: UpdateUserDa
 
     const userRef = doc(db, "users", uid);
     await updateDoc(userRef, {
-      ...(fullname && { fullname }),
+      ...(displayName && { displayName }),
       ...(avatarURL && { avatar: avatarURL }),
     });
 

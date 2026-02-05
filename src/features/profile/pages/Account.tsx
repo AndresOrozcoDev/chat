@@ -19,14 +19,16 @@ function Account() {
         if (!user) {
             navigate("/");
         }
+        console.log(user);
+        
     }, [user, navigate]);
 
-    const handleChangeGeneral = async ({ fullname, avatar }: { fullname: string; avatar?: File }) => {
+    const handleChangeGeneral = async ({ displayName, avatar }: { displayName: string; avatar?: File }) => {
         if (!firebaseUser) return;
 
         try {
             setLoading(true);
-            const result = await updateUserData({ uid: firebaseUser.uid, fullname, avatarFile: avatar });
+            const result = await updateUserData({ uid: firebaseUser.uid, displayName, avatarFile: avatar });
             toast.success("Datos actualizados correctamente");
             console.log("Resultado general:", result);
         } catch (err: any) {

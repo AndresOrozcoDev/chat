@@ -4,13 +4,13 @@ import { CircleUser, ArrowLeft } from "lucide-react";
 
 type ProfileFormProps = {
   user: AuthUser;
-  onSubmitGeneral: (formData: { fullname: string; avatar?: File }) => void;
+  onSubmitGeneral: (formData: { displayName: string; avatar?: File }) => void;
   onSubmitPassword: (formData: { newPassword: string }) => void;
   onBack: () => void;
 };
 
 const ProfileForm = ({ user, onSubmitGeneral, onSubmitPassword, onBack }: ProfileFormProps) => {
-  const [fullname, setFullname] = useState(user.displayName || "");
+  const [displayName, setDisplayName] = useState(user.displayName || "");
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -29,7 +29,7 @@ const ProfileForm = ({ user, onSubmitGeneral, onSubmitPassword, onBack }: Profil
   // Función para enviar los datos generales (nombre + avatar)
   const handleSubmitGeneral = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmitGeneral({ fullname, avatar: selectedFile || undefined });
+    onSubmitGeneral({ displayName, avatar: selectedFile || undefined });
   };
 
   // Función para enviar nueva contraseña
@@ -70,14 +70,14 @@ const ProfileForm = ({ user, onSubmitGeneral, onSubmitPassword, onBack }: Profil
           </div>
 
           <div className="flex flex-col gap-2 relative">
-            <label htmlFor="fullname" className="text-xs font-bold">Full name</label>
+            <label htmlFor="displayname" className="text-xs font-bold">Full Name</label>
             <input
               type="text"
-              id="fullname"
-              value={fullname}
-              onChange={(e) => setFullname(e.target.value)}
+              id="displayname"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
               className="w-full h-10 bg-white border text-black border-neutral-300 px-3 outline-none rounded-xl dark:bg-(--dark-bg-tertiary) dark:border-none dark:text-white"
-              placeholder="Andres Orozco"
+              placeholder="Full Name"
             />
           </div>
 

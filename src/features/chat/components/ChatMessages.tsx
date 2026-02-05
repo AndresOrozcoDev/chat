@@ -42,7 +42,7 @@ const ChatMessages = ({ messages, onShowChatList, selectedUserUid, onSendMessage
           <AlignLeft className="w-6 h-6 text-black dark:text-white" />
         </button>
         <p className="font-bold text-lg truncate">
-          {selectedUser?.email ?? "Selecciona un usuario"}
+          {selectedUser?.displayName || selectedUser?.email || "Selecciona un usuario"}
         </p>
         <div className="md:hidden w-20" />
       </div>
