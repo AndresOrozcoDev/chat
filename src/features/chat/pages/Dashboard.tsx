@@ -6,9 +6,9 @@ import {
   addMessage,
   checkIfChatExists,
   createNewChat,
-  getAllUsers,
   getMessages,
   getUserById,
+  subscribeToUsers,
 } from "../services/chat.services";
 import ChatList from "../components/ChatList";
 import Loader from "../../../shared/components/Loader";
@@ -16,12 +16,14 @@ import ChatMessages from "../components/ChatMessages";
 import { ChatMessage, ChatUser } from "../utils/types";
 import { useAuth } from "../../../context/auth.context";
 import { useTheme } from "../../../context/theme.context";
+import { useNotification } from '../../../context/notify.context';
 
 
 function Dashboard() {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
-  const { theme, toggleTheme } = useTheme()
+  const { theme, toggleTheme } = useTheme();
+  const { error } = useNotification();
 
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<ChatUser[]>([]);
@@ -37,19 +39,21 @@ function Dashboard() {
   }, [user, navigate]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      setLoading(true);
+    setLoading(true);
 
-      try {
-        const usersList = await getAllUsers();
+    const unsubscribe = subscribeToUsers(
+      (usersList) => {
         setUsers(usersList);
-      } catch (error) {
-        console.error("Error al obtener usuarios:", error);
-      } finally {
+        setLoading(false);
+      },
+      (err) => {
+        error(err);
         setLoading(false);
       }
-    };
-    fetchUsers();
+    );
+
+    // Limpieza al desmontar
+    return () => unsubscribe();
   }, []);
 
   const handleUserClick = async (uid: string) => {

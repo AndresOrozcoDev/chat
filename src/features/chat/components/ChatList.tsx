@@ -53,7 +53,7 @@ const ChatList = ({ users, onUserClick, onLogout, onShowChatList }: ChatListProp
                     <CircleUser className="w-5 h-5 text-neutral-500 dark:text-neutral-100" />
                   </div>
                 )}
-                <span className="truncate">{contact.displayName || contact.email}</span>
+                <span className="truncate">{contact.displayName && contact.displayName.trim() !== "" ? contact.displayName : contact.email}</span>
               </div>
             </li>
           ))}

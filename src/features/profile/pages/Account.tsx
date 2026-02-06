@@ -24,14 +24,12 @@ function Account() {
 
     const handleChangeGeneral = async ({ displayName, avatar }: { displayName: string; avatar?: File }) => {
         if (!firebaseUser) return;
-
         try {
             setLoading(true);
             await updateUserData({ user: firebaseUser!, displayName, avatarFile: avatar });
             success("Perfil actualizado correctamente");
         } catch (err: any) {
-            console.error(err);
-            error("Error al actualizar el perfil");
+            error(err);
         } finally {
             setLoading(false);
         }
@@ -39,14 +37,12 @@ function Account() {
 
     const handleChangePassword = async ({ newPassword }: { newPassword: string }) => {
         if (!firebaseUser) return;
-
         try {
             setLoading(true);
             await changePassword(firebaseUser, newPassword);
             success("Contraseña actualizada correctamente");
         } catch (err: any) {
-            console.error(err);
-            error(`Error al actualizar contraseña: ${err.message || err}`);
+            error(err);
         } finally {
             setLoading(false);
         }

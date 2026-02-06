@@ -18,6 +18,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  reloadUser: () => Promise<void>;
 }
 
 // 🔁 Contexto de autenticación
@@ -68,8 +69,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null); // Limpieza inmediata
   };
 
+  // 🔁 Refrescar datos del usuario actual
+  const reloadUser = async () => {};
+
   return (
-    <AuthContext.Provider value={{ user, firebaseUser,  login, register, logout }}>
+    <AuthContext.Provider value={{ user, firebaseUser,  login, register, logout, reloadUser }}>
       {!isAuthLoading && children}
     </AuthContext.Provider>
   );

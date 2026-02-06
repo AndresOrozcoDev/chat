@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDoc, getDocs, orderBy, query, serverTimestamp, setDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, serverTimestamp, setDoc, where } from "firebase/firestore";
 import { db } from "../../../firebase-config";
 import { ChatMessage, ChatUser } from "../utils/types";
 import { AuthUser } from "../../auth/utils/types";
@@ -11,6 +11,9 @@ export const createUser = async (user: AuthUser): Promise<void> => {
     const userRef = doc(usersRef, user.uid);
     await setDoc(userRef, {
       uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
       createdAt: serverTimestamp()
     });
   } catch (error) {
@@ -19,17 +22,25 @@ export const createUser = async (user: AuthUser): Promise<void> => {
   }
 };
 
-export const getAllUsers = async (): Promise<ChatUser[]> => {
-  try {
-    const usersSnapshot = await getDocs(usersRef);
-    return usersSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as ChatUser[];
-  } catch (error) {
-    console.error("Error al obtener usuarios:", error);
-    throw error;
-  }
+export const subscribeToUsers = (
+  onUpdate: (users: ChatUser[]) => void,
+  onError?: (error: any) => void
+) => {
+  const unsubscribe = onSnapshot(
+    usersRef,
+    (snapshot) => {
+      const usersList = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as ChatUser[];
+      onUpdate(usersList);
+    },
+    (error) => {
+      if (onError) onError(error);
+    }
+  );
+
+  return unsubscribe;
 };
 
 export const addMessage = async (uidSender: string, uidReceiver: string, messageText: string): Promise<void> => {
