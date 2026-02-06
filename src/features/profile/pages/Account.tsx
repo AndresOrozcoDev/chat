@@ -2,25 +2,24 @@ import { Sun } from 'lucide-react';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/auth.context";
-import { useTheme } from "../../../context/ThemeContext";
+import { useTheme } from "../../../context/theme.context";
 import ProfileForm from '../components/ProfileForm';
 import Loader from '../../../shared/components/Loader';
 import { changePassword, updateUserData } from '../services/profile.services';
-import { toast } from "sonner";
+import { useNotification } from "../../../context/notify.context";
 
 function Account() {
     const navigate = useNavigate();
     const { user, firebaseUser } = useAuth();
     const { theme, toggleTheme } = useTheme();
     const [loading, setLoading] = useState(false);
+    const { success, error } = useNotification();
 
 
     useEffect(() => {
         if (!user) {
             navigate("/");
-        }
-        console.log(user);
-        
+        }        
     }, [user, navigate]);
 
     const handleChangeGeneral = async ({ displayName, avatar }: { displayName: string; avatar?: File }) => {
@@ -28,12 +27,11 @@ function Account() {
 
         try {
             setLoading(true);
-            const result = await updateUserData({ user: firebaseUser!, displayName, avatarFile: avatar });
-            toast.success("Datos actualizados correctamente");
-            console.log("Resultado general:", result);
+            await updateUserData({ user: firebaseUser!, displayName, avatarFile: avatar });
+            success("Perfil actualizado correctamente");
         } catch (err: any) {
             console.error(err);
-            toast.error(`Error al actualizar datos: ${err.message || err}`);
+            error("Error al actualizar el perfil");
         } finally {
             setLoading(false);
         }
@@ -45,10 +43,10 @@ function Account() {
         try {
             setLoading(true);
             await changePassword(firebaseUser, newPassword);
-            toast.success("Contraseña actualizada correctamente");
+            success("Contraseña actualizada correctamente");
         } catch (err: any) {
             console.error(err);
-            toast.error(`Error al actualizar contraseña: ${err.message || err}`);
+            error(`Error al actualizar contraseña: ${err.message || err}`);
         } finally {
             setLoading(false);
         }

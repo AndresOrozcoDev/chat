@@ -15,7 +15,7 @@ import Loader from "../../../shared/components/Loader";
 import ChatMessages from "../components/ChatMessages";
 import { ChatMessage, ChatUser } from "../utils/types";
 import { useAuth } from "../../../context/auth.context";
-import { useTheme } from "../../../context/ThemeContext";
+import { useTheme } from "../../../context/theme.context";
 
 
 function Dashboard() {

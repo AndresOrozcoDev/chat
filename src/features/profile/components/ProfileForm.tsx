@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthUser } from "../../auth/utils/types";
 import { CircleUser, ArrowLeft } from "lucide-react";
 
@@ -16,6 +16,12 @@ const ProfileForm = ({ user, onSubmitGeneral, onSubmitPassword, onBack }: Profil
 
   const [newPassword, setNewPassword] = useState("");
   const [isVisibleNewpass, setIsVisibleNewpass] = useState(false);
+
+  useEffect(() => {
+    if (user.photoURL) {
+      setPreviewImage(user.photoURL);
+    }
+  }, [user.photoURL]);
 
   // Manejar previsualización de imagen
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +62,7 @@ const ProfileForm = ({ user, onSubmitGeneral, onSubmitPassword, onBack }: Profil
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              className="mb-2"
+              className="mb-2 cursor-pointer"
             />
             {previewImage ? (
               <img
@@ -83,7 +89,7 @@ const ProfileForm = ({ user, onSubmitGeneral, onSubmitPassword, onBack }: Profil
 
           <button
             type="submit"
-            className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl"
+            className="btn btn--primary"
           >
             Guardar datos
           </button>
@@ -121,7 +127,7 @@ const ProfileForm = ({ user, onSubmitGeneral, onSubmitPassword, onBack }: Profil
               />
               <button
                 type="submit"
-                className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl"
+                className="btn btn--primary"
               >
                 Cambiar contraseña
               </button>
