@@ -1,6 +1,6 @@
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, UserCredential } from "firebase/auth";
 import { auth } from "../../../firebase-config";
-import { createUser } from "../.../../../../features/chat/services/chat.services";
+import { createUser } from "../../chat/services/chat.services";
 
 export const loginUser = async (email: string, password: string): Promise<UserCredential> => {
     try {
@@ -11,12 +11,13 @@ export const loginUser = async (email: string, password: string): Promise<UserCr
     }
 };
 
-export const registerUser = async (email: string, password: string): Promise<UserCredential> => {
+export const registerUser = async ( email: string, password: string ): Promise<UserCredential> => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await createUser(userCredential.user);
         return userCredential;
     } catch (error) {
+        console.error("Error al registrar usuario:", error);
         throw error;
     }
 };

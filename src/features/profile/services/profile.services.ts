@@ -1,10 +1,10 @@
-import { updatePassword, User } from "firebase/auth";
+import { updatePassword, updateProfile, User } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../../firebase-config";
 
 interface UpdateUserData {
-  uid: string;
+  user: User;
   displayName?: string;
   avatarFile?: File;
 }
@@ -17,23 +17,44 @@ export const changePassword = async (user: User, newPassword: string): Promise<v
   }
 };
 
-export const updateUserData = async ({ uid, displayName, avatarFile }: UpdateUserData) => {
+export const updateUserData = async ({
+  user,
+  displayName,
+  avatarFile,
+}: UpdateUserData) => {
   try {
     let avatarURL: string | undefined;
 
+    // 1️⃣ Subir avatar
     if (avatarFile) {
-      const storageRef = ref(storage, `avatars/${uid}/${avatarFile.name}`);
+      const storageRef = ref(storage, `avatars/${user.uid}/${avatarFile.name}`);
       await uploadBytes(storageRef, avatarFile);
       avatarURL = await getDownloadURL(storageRef);
     }
 
-    const userRef = doc(db, "users", uid);
+    // 2️⃣ ACTUALIZAR FIREBASE AUTH (FUENTE DE VERDAD)
+    if (displayName || avatarURL) {
+      await updateProfile(user, {
+        ...(displayName && { displayName }),
+        ...(avatarURL && { photoURL: avatarURL }),
+      });
+
+      // 🔁 Fuerza refresco del user en memoria
+      await user.reload();
+    }
+
+    // 3️⃣ SINCRONIZAR FIRESTORE (COPIA)
+    const userRef = doc(db, "users", user.uid);
     await updateDoc(userRef, {
       ...(displayName && { displayName }),
-      ...(avatarURL && { avatar: avatarURL }),
+      ...(avatarURL && { photoURL: avatarURL }),
     });
 
-    return { success: true, avatarURL };
+    return {
+      success: true,
+      displayName,
+      photoURL: avatarURL,
+    };
   } catch (error) {
     console.error("Error actualizando datos de usuario:", error);
     throw error;

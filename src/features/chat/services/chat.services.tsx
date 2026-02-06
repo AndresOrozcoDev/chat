@@ -1,10 +1,23 @@
 import { addDoc, collection, doc, getDoc, getDocs, orderBy, query, serverTimestamp, setDoc, where } from "firebase/firestore";
 import { db } from "../../../firebase-config";
-import { AuthUser } from "../../auth/utils/types";
 import { ChatMessage, ChatUser } from "../utils/types";
+import { AuthUser } from "../../auth/utils/types";
 
 const usersRef = collection(db, "users");
 const userChatsRef = (uid: string) => collection(db, "users", uid, "chats");
+
+export const createUser = async (user: AuthUser): Promise<void> => {
+  try {
+    const userRef = doc(usersRef, user.uid);
+    await setDoc(userRef, {
+      uid: user.uid,
+      createdAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error("Error al crear el usuario en Firestore:", error);
+    throw error;
+  }
+};
 
 export const getAllUsers = async (): Promise<ChatUser[]> => {
   try {
@@ -15,21 +28,6 @@ export const getAllUsers = async (): Promise<ChatUser[]> => {
     })) as ChatUser[];
   } catch (error) {
     console.error("Error al obtener usuarios:", error);
-    throw error;
-  }
-};
-
-export const createUser = async (user: AuthUser): Promise<void> => {
-  try {
-    const userRef = doc(usersRef, user.uid);
-    await setDoc(userRef, {
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      createdAt: serverTimestamp(),
-    });
-  } catch (error) {
-    console.error("Error al crear el usuario en Firestore:", error);
     throw error;
   }
 };

@@ -28,7 +28,7 @@ function Account() {
 
         try {
             setLoading(true);
-            const result = await updateUserData({ uid: firebaseUser.uid, displayName, avatarFile: avatar });
+            const result = await updateUserData({ user: firebaseUser!, displayName, avatarFile: avatar });
             toast.success("Datos actualizados correctamente");
             console.log("Resultado general:", result);
         } catch (err: any) {
