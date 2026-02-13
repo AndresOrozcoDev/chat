@@ -1,5 +1,7 @@
 # Chat
 
+Web application for real-time chat between authenticated users.
+
 <p align="center">
   <img src="https://img.shields.io/badge/React-19.1.0-20232a?logo=react&logoColor=%2361DAFB" />
   <img src="https://img.shields.io/badge/React_Router-7.6.3-CA4245?logo=react-router&logoColor=white" />
@@ -17,129 +19,177 @@
   <img src="https://img.shields.io/badge/license-MIT-blue" />
 </p>
 
-A web application that simulates a chat built with React for managing users and their messages across different real-time chats.
+---
+
+## Live Demo
+
+You can see the chat app running in production here:
+
+[Chat](https://chat-ochre-alpha-83.vercel.app)
 
 ---
 
-## 🔗 Live Demo
+## Features
 
-You can see the chat running in production here:
+- Sign up and sign in with Firebase Auth.
+- User profile creation in Firestore on registration.
+- User list to start conversations.
+- Direct messages between users stored in Firestore.
+- Profile updates (name and avatar).
+- Password change.
+- Light/dark theme.
+- Toast notifications.
 
-👉 [Chat](chat-ochre-alpha-83.vercel.app)
+## Requirements
 
-Automatically deployed with [Vercel](https://vercel.com), using serverless functions for API endpoints.
+- Node.js 20+
+- npm 10+
+- Configured Firebase account/project
+
+## Local Setup
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/AndresOrozcoDev/chat.git
+cd chat
+```
+
+2. Install dependencies
+
+```bash
+npm install
+```
+
+3. Create a `.env` file with Firebase variables
+
+```bash
+VITE_FIREBASE_API_KEY=...
+VITE_FIREBASE_AUTH_DOMAIN=...
+VITE_FIREBASE_PROJECT_ID=...
+VITE_FIREBASE_STORAGE_BUCKET=...
+VITE_FIREBASE_MESSAGING_SENDER_ID=...
+VITE_FIREBASE_APP_ID=...
+VITE_FIREBASE_MEASUREMENT_ID=...
+```
+
+4. Start the development environment
+
+```bash
+npm run dev
+```
+
+## Scripts
+
+- `npm run dev`: starts Vite in development mode.
+- `npm run build`: compiles TypeScript and generates a production build.
+- `npm run preview`: serves the build locally.
+- `npm run lint`: runs ESLint.
+- `npm run test`: runs Vitest in watch mode.
+- `npm run test:coverage`: runs tests with coverage.
+
+## App Routes
+
+- `/`: login
+- `/register`: registration
+- `/dashboard`: main chat
+- `/account`: account and profile settings
+
+## Project Structure
+
+```text
+.
+|- functions/
+|  \- src/
+|     \- index.ts
+|- public/
+|- src/
+|  |- context/
+|  |  |- auth.context.tsx
+|  |  |- notify.context.tsx
+|  |  \- theme.context.tsx
+|  |- features/
+|  |  |- auth/
+|  |  |- chat/
+|  |  \- profile/
+|  |- shared/
+|  |  |- components/
+|  |  \- pages/
+|  |- App.tsx
+|  |- firebase-config.ts
+|  \- main.tsx
+|- vercel.json
+\- package.json
+```
 
 ---
 
-## 🛠️ Requirements
+## Data Model (Firestore)
 
-- [Node](https://nodejs.org/)
-- [Git](https://git-scm.com/)
+Main collections:
 
----
+- `users/{uid}`: basic public user data.
+- `users/{uid}/chats/{otherUid}`: conversation reference with another user.
+- `users/{uid}/chats/{otherUid}/messages/{messageId}`: chat messages.
 
-## 💻 Local Setup
+Each message stores:
+- `text`
+- `senderId`
+- `createdAt` (server timestamp)
 
-Clone the repository
-```bash
-    git clone https://github.com/AndresOrozcoDev/chat.git
-    cd chat
-```
+## Deployment
 
-Install dependencies
-```bash
-    npm install
-```
+The project is prepared for Vercel:
+- `vercel.json` rewrites all routes to `index.html` to support SPA routing.
 
-Run the development server
-```bash
-    npm run dev
-```
+## Current Status
 
-## 📁 Structure
-
-```bash
-├── index.html
-├── package.json
-├── .env
-├── vercel.json
-├── vitest.config.ts
-├── public/
-├── functions/
-│   └── src/
-│   │   └── index.ts
-├── src/
-│   ├── test/
-│   │   ├── setup.ts
-│   ├── assets/
-│   │   ├── fonts/
-│   │   ├── images/
-│   │   └── icons/
-│   ├── context/
-│   │   ├── auth.context.ts
-│   │   └── theme.context.ts
-│   ├── shared/
-│   │   ├── components/
-│   │   └── pages/
-│   ├── features/
-│   │   ├── auth/
-│   │   │   ├── components/
-│   │   │   ├── pages/
-│   │   │   ├── services/
-│   │   │   ├── utils/
-│   │   │   │  └── types.ts
-│   │   ├── profile/
-│   │   │   ├── components/
-│   │   │   ├── pages/
-│   │   │   └── services/
-│   │   └── chat/
-│   │       ├── components/
-│   │       ├── pages/
-│   │       ├── services/
-│   │       ├── utils/
-│   │       │  └── types.ts
-│   ├── App.css
-│   ├── App.tsx
-│   ├── index.css
-│   ├── firebase-config.ts.css
-│   └── main.tsx
-```
+- Functional app for authentication, messaging, and profile management.
+- Test coverage is focused on main routing (`src/App.test.tsx`).
+- There is a Cloud Function scaffold in `functions/src/index.ts`, currently commented out.
 
 ## Tests
-Runs tests in watch mode with fast feedback (development mode).
+
+Run tests in watch mode with fast feedback (development mode):
 ```bash
-    npm run test
+npm run test
 ```
 
-Run tests with coverage
+Run tests with coverage:
 ```bash
-    npm run test:coverage
+npm run test:coverage
 ```
 
-Run tests with UI
+Run tests with UI:
 ```bash
-    npm run test:ui
+npm run test:ui
 ```
 
 ## Maintenance Checklist
-Review package vulnerabilities in production
+
+Review production package vulnerabilities:
 ```bash
-    npm audit fix
+npm audit fix
 ```
 
-## Deployments
-Generate the production build
+## Builds
+
+Generate a production build:
 ```bash
-    npm run build
+npm run build
 ```
 
 ---
 
-## 👨‍💻 Author
+## License
 
-Developed with 💙 by [Andrés Orozco](https://github.com/AndresOrozcoDev)
+MIT (`LICENSE`).
 
-- 📬 [andresorozcodev@gmail.com](mailto:andresorozcodev@gmail.com)
-- 🌐 [LinkedIn](https://www.linkedin.com/in/andresorozcodev)
+## Author
+
+Developed by [Andres Orozco](https://github.com/AndresOrozcoDev)
+
+- [andresorozcodev@gmail.com](mailto:andresorozcodev@gmail.com)
+- [LinkedIn](https://www.linkedin.com/in/andresorozcodev)
 
 ---
