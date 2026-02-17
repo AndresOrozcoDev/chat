@@ -21,6 +21,14 @@ Web application for real-time chat between authenticated users.
 
 ---
 
+## Deepwiki Documentation
+
+You can see the DeepWiki oficial documentacion here:
+
+(DeepWiki)[https://deepwiki.com/AndresOrozcoDev/chat]
+
+---
+
 ## Live Demo
 
 You can see the chat app running in production here:
