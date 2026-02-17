@@ -17,9 +17,7 @@ Web application for real-time chat between authenticated users.
   <img src="https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel" />
   <img src="https://img.shields.io/badge/status-in%20development-yellow" />
   <img src="https://img.shields.io/badge/license-MIT-blue" />
-  <a href="https://deepwiki.com/AndresOrozcoDev/chat" target="_blank">
-    <img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki" />
-  </a>
+  <a href="https://deepwiki.com/AndresOrozcoDev/chat"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
 </p>
 
 ---
