@@ -24,7 +24,7 @@ Web application for real-time chat between authenticated users.
 
 ---
 
-## Deepwiki Documentation
+## DeepWiki Documentation
 
 You can see the DeepWiki oficial documentacion here:
 
