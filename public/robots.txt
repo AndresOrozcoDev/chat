@@ -1,0 +1,33 @@
+# Robots.txt para Chat App
+# Permite a los motores de búsqueda indexar contenido público
+
+User-agent: *
+Allow: /
+Allow: /assets/
+Allow: /favicon.svg
+
+# No indexar rutas privadas y de autenticación
+Disallow: /dashboard/
+Disallow: /account/
+Disallow: /api/
+Disallow: /admin/
+
+# No indexar páginas de error
+Disallow: /*?*=
+Disallow: /*utm_
+
+# Crawl delay para reducir carga del servidor
+Crawl-delay: 1
+
+# Especificar sitemap
+Sitemap: https://chat-ochre-alpha-83.vercel.app/sitemap.xml
+
+# User-agent específicos
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
